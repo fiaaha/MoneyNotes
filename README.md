@@ -1,10 +1,10 @@
 Latar Belakang Proyek
 
-Pengembangan aplikasi MoneyMate didasari oleh tantangan riil yang dihadapi mahasiswa dalam mengelola keuangan pribadi. Kesulitan dalam melakukan pencatatan yang sistematis sering kali berdampak pada pengelolaan pengeluaran yang tidak terkontrol. Selain itu, pengelolaan piutang dan kewajiban hutang yang tidak terdokumentasi dengan baik menjadi salah satu pemicu utama ketidakstabilan arus kas mahasiswa. Proyek ini hadir sebagai solusi praktis untuk memfasilitasi pencatatan keuangan yang lebih disiplin, transparan, dan terintegrasi dalam satu platform digital.
+Pengembangan aplikasi MoneyNotes didasari oleh tantangan riil yang dihadapi mahasiswa dalam mengelola keuangan pribadi. Kesulitan dalam melakukan pencatatan yang sistematis sering kali berdampak pada pengelolaan pengeluaran yang tidak terkontrol. Selain itu, pengelolaan piutang dan kewajiban hutang yang tidak terdokumentasi dengan baik menjadi salah satu pemicu utama ketidakstabilan arus kas mahasiswa. Proyek ini hadir sebagai solusi praktis untuk memfasilitasi pencatatan keuangan yang lebih disiplin, transparan, dan terintegrasi dalam satu platform digital.
 
 Deskripsi Teknis
 
-MoneyMate merupakan aplikasi manajemen keuangan berbasis web yang dikembangkan menggunakan arsitektur Multi-Page Application (MPA). Teknologi utama yang digunakan mencakup HTML, JavaScript murni (Vanilla JS), dan Tailwind CSS. Aplikasi ini mengimplementasikan sistem penyimpanan data di sisi klien (Client-Side) melalui fitur localStorage, yang memastikan kecepatan pemrosesan data serta menjaga privasi pengguna tanpa ketergantungan pada server eksternal.  
+MoneyNotes merupakan aplikasi manajemen keuangan berbasis web yang dikembangkan menggunakan arsitektur Multi-Page Application (MPA). Teknologi utama yang digunakan mencakup HTML, JavaScript murni (Vanilla JS), dan Tailwind CSS. Aplikasi ini mengimplementasikan sistem penyimpanan data di sisi klien (Client-Side) melalui fitur localStorage, yang memastikan kecepatan pemrosesan data serta menjaga privasi pengguna tanpa ketergantungan pada server eksternal.  
 
 Fitur Unggulan dan Inovasi:
 
