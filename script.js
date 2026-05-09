@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 2. STATE MANAGEMENT (DATA KEUANGAN)
     // ==========================================
-    let financialData = JSON.parse(localStorage.getItem('moneyNotesData')) || {
+    let financialData = JSON.parse(localStorage.getItem('moneyMateData')) || {
         balance: 0, income: 0, expenses: 0, savings: 0, transactions: [], debts: []
     };
     let selectedDebtType = 'i_owe';
 
-    const syncStorage = () => localStorage.setItem('moneyNotesData', JSON.stringify(financialData));
+    const syncStorage = () => localStorage.setItem('moneyMateData', JSON.stringify(financialData));
 
     // ==========================================
     // 3. LOGIKA HALAMAN LOGIN & LOGOUT
@@ -57,15 +57,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const welcomeUser = document.getElementById('welcome-user');
         if (welcomeUser) welcomeUser.innerText = `Halo, ${localStorage.getItem('currentUser')}!`;
         
+        // --- FITUR BARU: TOGGLE HIDE/SHOW HUTANG ---
+        const toggleDebtBtn = document.getElementById('toggle-debt-btn');
+        const debtListUl = document.getElementById('active-debts-list');
+        const toggleDebtIcon = document.getElementById('toggle-debt-icon');
+        const toggleDebtText = document.getElementById('toggle-debt-text');
+
+        if (toggleDebtBtn && debtListUl) {
+            toggleDebtBtn.addEventListener('click', () => {
+                // Menambah atau menghapus class 'hidden'
+                debtListUl.classList.toggle('hidden');
+                
+                // Ubah teks dan ikon sesuai status
+                if (debtListUl.classList.contains('hidden')) {
+                    toggleDebtIcon.innerText = '▼';
+                    toggleDebtText.innerText = 'Tampilkan';
+                } else {
+                    toggleDebtIcon.innerText = '▲';
+                    toggleDebtText.innerText = 'Sembunyikan';
+                }
+            });
+        }
+
         // --- A. FUNGSI PELUNASAN HUTANG ---
         const resolveDebt = (id) => {
             const debtIndex = financialData.debts.findIndex(d => d.id === id);
-            if (debtIndex === -1) return; // Jika tidak ketemu, batalkan
+            if (debtIndex === -1) return; 
 
             const debt = financialData.debts[debtIndex];
             
             if (debt.type === 'i_owe') {
-                // Saya bayar hutang ke orang -> Saldo berkurang, masuk pengeluaran
                 if (financialData.balance < debt.amount) return alert("Saldo utama kamu tidak cukup untuk melunasi hutang ini!");
                 
                 financialData.balance -= debt.amount;
@@ -73,29 +94,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 financialData.transactions.push({ type: 'expense', amount: debt.amount, note: `Pelunasan Hutang ke ${debt.person}`, timestamp: new Date().toISOString() });
                 alert(`Hutang sebesar Rp ${debt.amount.toLocaleString()} kepada ${debt.person} berhasil dibayar!`);
             } else {
-                // Orang bayar hutang ke saya -> Saldo bertambah, masuk pemasukan
                 financialData.balance += debt.amount;
                 financialData.income += debt.amount;
                 financialData.transactions.push({ type: 'income', amount: debt.amount, note: `Terima Bayaran Piutang dari ${debt.person}`, timestamp: new Date().toISOString() });
                 alert(`Piutang sebesar Rp ${debt.amount.toLocaleString()} dari ${debt.person} berhasil diterima!`);
             }
 
-            // Hapus hutang dari daftar karena sudah lunas
             financialData.debts.splice(debtIndex, 1);
             syncStorage();
-            updateStats(); // Render ulang semua angka di layar
+            updateStats(); 
         };
 
         // --- B. EVENT DELEGATION UNTUK TOMBOL PELUNASAN ---
-        // Kita pasang pendengar di wadah 'ul' nya, bukan di tombolnya langsung
         const activeDebtsList = document.getElementById('active-debts-list');
         if (activeDebtsList) {
             activeDebtsList.addEventListener('click', (e) => {
-                // Cek apakah klik berasal dari elemen yang punya class 'resolve-debt-btn'
                 const btn = e.target.closest('.resolve-debt-btn');
-                if (!btn) return; // Kalau yang diklik bukan tombol, abaikan
+                if (!btn) return; 
                 
-                // Jika tombol yang diklik, ambil ID-nya dan jalankan pelunasan
                 const idToResolve = parseInt(btn.getAttribute('data-id'));
                 resolveDebt(idToResolve);
             });
@@ -116,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isIOwe = debt.type === 'i_owe';
                 li.className = "bg-slate-700/50 p-4 rounded-lg flex flex-col md:flex-row justify-between items-center gap-4 border-l-4 " + (isIOwe ? 'border-red-400' : 'border-emerald-400');
                 
-                // Pembuatan HTML dinamis untuk setiap baris hutang
                 li.innerHTML = `
                     <div class="flex-1 w-full text-left">
                         <div class="font-bold text-sm text-slate-300">${isIOwe ? 'Hutang ke' : 'Piutang dari'}: ${debt.person}</div>
@@ -178,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (elSav) elSav.innerText = `Rp ${financialData.savings.toLocaleString()}`;
             
             renderList();
-            renderActiveDebts(); // Pastikan hutang aktif dirender ulang
+            renderActiveDebts(); 
         };
 
         const filterCat = document.getElementById('filter-category');
@@ -237,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Form Pemasukan
         const incForm = document.getElementById('income-form');
         if (incForm) incForm.addEventListener('submit', (e) => { 
             e.preventDefault(); 
@@ -249,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'dashboard.html'; 
         });
 
-        // Form Pengeluaran
         const expForm = document.getElementById('expense-form');
         if (expForm) expForm.addEventListener('submit', (e) => { 
             e.preventDefault(); 
@@ -262,7 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'dashboard.html'; 
         });
 
-        // Form Tabungan
         const savForm = document.getElementById('savings-form');
         if (savForm) savForm.addEventListener('submit', (e) => { 
             e.preventDefault(); 
@@ -276,7 +288,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'dashboard.html'; 
         });
 
-        // Form Hutang & Piutang
         const debtForm = document.getElementById('debt-form');
         if (debtForm) {
             const btnOwe = document.getElementById('type-owe');
@@ -307,7 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const person = document.getElementById('debt-person').value;
                 const reminderDate = reminderInput.value;
                 
-                // Gunakan Date.now() sebagai ID unik untuk pelunasan nanti
                 financialData.debts.push({ 
                     id: Date.now(), 
                     person, 
