@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     toggleDebtText.innerText = 'Tampilkan';
                 } else {
                     toggleDebtIcon.innerText = '▲';
-                    toggleDebtText.innerText = 'Sembunyikan';
+                    toggleDebtText.innerText = 'Tutup';
                 }
             });
         }
